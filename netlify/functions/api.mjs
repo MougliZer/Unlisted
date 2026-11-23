@@ -170,11 +170,12 @@ async function recherche(req, url) {
 
   const sansEspaces = q.replace(/[\s-]/g, "");
   const estCodeBarre = /^\d{8,14}$/.test(sansEspaces);
+  const titre = url.searchParams.get("mode") === "titre";
   const qs = new URLSearchParams({
     type: "release",
     format: "vinyl",
     per_page: "25",
-    [estCodeBarre ? "barcode" : "catno"]: estCodeBarre ? sansEspaces : q,
+    [titre ? "q" : estCodeBarre ? "barcode" : "catno"]: titre ? q : estCodeBarre ? sansEspaces : q,
   });
 
   const res = await appelerDiscogs(`/database/search?${qs}`, s);
@@ -236,6 +237,25 @@ function logout() {
   return json({ ok: true }, 200, [effacerCookie(SESSION), effacerCookie(PENDING)]);
 }
 
+// 6. Prix le plus bas en vente (en euros) et popularité d'un pressage
+async function infoRelease(req, url) {
+  const s = sessionDepuis(req);
+  if (!s) return json({ error: "non_connecte" }, 401);
+  const id = parseInt(url.searchParams.get("id"), 10);
+  if (!id) return json({ error: "id" }, 400);
+  const res = await appelerDiscogs(`/releases/${id}?curr_abbr=EUR`, s);
+  if (res.status === 429) return json({ error: "limite" }, 429);
+  if (res.status === 404) return json({ lowest: null, forSale: 0, have: 0, want: 0 });
+  if (!res.ok) return json({ error: "discogs" }, 502);
+  const d = await res.json();
+  return json({
+    lowest: typeof d.lowest_price === "number" ? d.lowest_price : null,
+    forSale: d.num_for_sale || 0,
+    have: (d.community || {}).have || 0,
+    want: (d.community || {}).want || 0,
+  });
+}
+
 // ---------- Routeur ----------
 
 export default async (req) => {
@@ -251,6 +271,7 @@ export default async (req) => {
       case "me": return me(req);
       case "search": return await recherche(req, url);
       case "collection": return await collection(req, url);
+      case "info": return await infoRelease(req, url);
       case "logout": return logout();
       default: return json({ error: "introuvable" }, 404);
     }
