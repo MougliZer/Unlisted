@@ -4,551 +4,246 @@
 <meta charset="utf-8">
 <title>Unlisted</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#15161A">
+<meta name="theme-color" content="#0d0e12">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Unlisted">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%80%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --paper: #ECEEE6;
-    --card: #F7F8F3;
-    --ink: #1A1D26;
-    --muted: #5B6070;
-    --vinyl: #15161A;
-    --label: #E9B72B;
-    --teal: #1E6B66;
-    --line: #CBCEC2;
-    --danger: #A33A2B;
-    --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
-    --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  }
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: var(--body);
-    font-size: 16px;
-    line-height: 1.45;
-    padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
-  }
-  :focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
-  button, input { font: inherit; color: inherit; }
-
-  /* En-tête : le disque est le seul élément qui bouge */
-  header {
-    background: var(--vinyl);
-    color: #F2F2EC;
-    padding: 22px 20px 18px;
-    display: flex;
-    align-items: center;
-    gap: 18px;
-  }
-  .record {
-    flex: none;
-    width: 76px; height: 76px;
-    border-radius: 50%;
-    background: repeating-radial-gradient(circle at center, #15161A 0 2px, #23252D 2px 3px);
-    box-shadow: 0 0 0 2px #2B2D35;
-    position: relative;
-    animation: spin 5s linear infinite;
-  }
-  .record::before {
-    content: "";
-    position: absolute; inset: 0;
-    border-radius: 50%;
-    background: conic-gradient(from 20deg, transparent 0 40deg, rgba(255,255,255,.12) 60deg, transparent 90deg 220deg, rgba(255,255,255,.10) 240deg, transparent 270deg);
-  }
-  .record::after {
-    content: "";
-    position: absolute; inset: 26px;
-    border-radius: 50%;
-    background: radial-gradient(circle at center, var(--vinyl) 0 3px, var(--label) 3.5px);
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce) { .record { animation: none; } }
-
-  h1 {
-    font-family: var(--display);
-    font-weight: 800;
-    font-size: 2rem;
-    line-height: 1;
-    margin: 0 0 4px;
-    letter-spacing: -0.01em;
-  }
-  #compteur { margin: 0; color: #B9BCC6; font-size: .95rem; }
-
-  nav {
-    display: flex;
-    background: var(--vinyl);
-    padding: 0 12px;
-    gap: 4px;
-    position: sticky; top: 0; z-index: 5;
-  }
-  nav button {
-    flex: 1;
-    background: none;
-    border: 0;
-    border-bottom: 4px solid transparent;
-    color: #B9BCC6;
-    padding: 12px 8px 10px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  nav button[aria-selected="true"] { color: #fff; border-bottom-color: var(--label); }
-
-  main { max-width: 720px; margin: 0 auto; padding: 20px 16px 48px; }
-  section[hidden] { display: none; }
-  h2 { font-family: var(--display); font-size: 1.35rem; margin: 0 0 12px; }
-  p.aide { color: var(--muted); margin: 0 0 16px; max-width: 60ch; }
-
-  form { display: flex; gap: 8px; margin-bottom: 18px; }
-  input[type="text"] {
-    flex: 1; min-width: 0;
-    background: var(--card);
-    border: 2px solid var(--line);
-    border-radius: 10px;
-    padding: 12px 14px;
-  }
-  input:focus { border-color: var(--teal); outline: none; }
-  .btn {
-    display: inline-block;
-    background: var(--ink);
-    color: #fff;
-    border: 0;
-    border-radius: 10px;
-    padding: 12px 18px;
-    font-weight: 600;
-    text-decoration: none;
-    text-align: center;
-    cursor: pointer;
-  }
-  .btn:disabled { opacity: .5; cursor: default; }
-  .btn.label { background: var(--label); color: var(--vinyl); }
-  .btn.ghost { background: none; color: var(--danger); padding: 6px 0; font-weight: 500; }
-  .btn.sobre { background: none; color: var(--ink); border: 2px solid var(--line); }
-  .btn.small { padding: 8px 14px; }
-
-  .statut { min-height: 1.5em; margin: 0 0 12px; color: var(--muted); }
-  .statut.erreur { color: var(--danger); font-weight: 500; }
-
-  .compte-carte {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 18px;
-    margin-bottom: 16px;
-  }
-  .compte-carte p { margin: 0 0 14px; }
-  .actions { display: flex; flex-wrap: wrap; gap: 10px; }
-  progress { width: 100%; height: 10px; margin: 0 0 12px; accent-color: var(--teal); }
-
-  .resultat {
-    display: flex; gap: 14px;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 10px;
-  }
-  .resultat img, .pochette-vide {
-    flex: none;
-    width: 76px; height: 76px;
-    border-radius: 6px;
-    object-fit: cover;
-    background: #D9DCD0;
-  }
-  .infos { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-  .titre { font-weight: 600; overflow-wrap: anywhere; }
-  .detail { color: var(--muted); font-size: .92rem; }
-  .infos .btn { margin-top: auto; align-self: flex-start; }
-  .deja { color: var(--teal); font-weight: 600; margin-top: auto; }
-
-  #grille {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px 14px;
-  }
-  @media (min-width: 560px) { #grille { grid-template-columns: repeat(3, 1fr); } }
-  .disque img, .disque .pochette-vide {
-    width: 100%; height: auto; aspect-ratio: 1;
-    border-radius: 4px;
-    box-shadow: 0 6px 14px -8px rgba(0,0,0,.55);
-  }
-  .disque .titre { margin-top: 8px; font-size: .95rem; }
-
-  .vide {
-    border: 2px dashed var(--line);
-    border-radius: 12px;
-    padding: 28px 18px;
-    text-align: center;
-    color: var(--muted);
-  }
-  .vide p { margin: 0 0 14px; }
+:root{--bg:#0d0e12;--tx:#f3f2ee;--mu:#9a9eac;--ac:#e9b72b;--gl:rgba(255,255,255,.07);--bd:rgba(255,255,255,.11);--d:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;--b:"Instrument Sans",system-ui,-apple-system,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;color:var(--tx);font:16px/1.45 var(--b);background:radial-gradient(60% 38% at 90% -4%,rgba(233,183,43,.2),transparent),radial-gradient(55% 35% at -5% 32%,rgba(30,107,102,.32),transparent),var(--bg);background-attachment:fixed;min-height:100vh;padding-top:env(safe-area-inset-top,0)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.top{display:flex;align-items:center;justify-content:space-between;max-width:720px;margin:0 auto;padding:18px 18px 4px}
+.logo{font:800 1.5rem var(--d);letter-spacing:-.01em}
+main{max-width:720px;margin:0 auto;padding:10px 16px 130px}
+h2{font:800 1.7rem/1.1 var(--d);margin:18px 0 12px}
+h3{font:600 1.05rem var(--d);margin:22px 0 10px}
+.mu,small{color:var(--mu)}
+.glass{background:var(--gl);border:1px solid var(--bd);border-radius:26px;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+.pill,.btn{border:0;border-radius:99px;padding:11px 18px;font-weight:600;background:var(--ac);color:#15161a;cursor:pointer;text-decoration:none;display:inline-block;text-align:center}
+.btn.sobre,.pill.sobre{background:var(--gl);color:var(--tx);border:1px solid var(--bd)}
+.btn.danger{background:none;color:#ff8d7a;border:1px solid rgba(255,141,122,.4)}
+.btn:disabled{opacity:.5}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.hero{position:relative;overflow:hidden;padding:24px;margin-bottom:14px}
+.hero .num{font:800 5.2rem/1 var(--d);letter-spacing:-.03em;margin:6px 0 2px}
+.hero p{margin:0 0 8px;font-size:1.1rem}
+.rec{position:absolute;right:-38px;top:50%;margin-top:-90px;width:180px;height:180px;border-radius:50%;background:repeating-radial-gradient(circle,#15161a 0 2px,#262830 2px 3px);animation:spin 7s linear infinite;opacity:.9}
+.rec:after{content:"";position:absolute;inset:60px;border-radius:50%;background:radial-gradient(circle,#15161a 0 4px,var(--ac) 5px)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.rec{animation:none}}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.stat{padding:16px}.stat b{display:block;font:800 1.7rem/1.1 var(--d);margin:4px 0}
+.prog{padding:14px 18px;margin-bottom:12px}
+progress{width:100%;height:8px;accent-color:var(--ac);margin-top:8px}
+.mise{display:flex;gap:14px;align-items:center;padding:12px;margin-bottom:12px;width:100%;text-align:left;color:inherit;cursor:pointer}
+.mise .cv{width:78px;flex:none}.mise b{display:block}
+.rail{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px}
+.rail .alb{flex:none;width:112px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 12px}
+@media(min-width:560px){.grid{grid-template-columns:repeat(3,1fr)}}
+.alb{background:none;border:0;padding:0;text-align:left;color:inherit;cursor:pointer;min-width:0}
+.alb b{display:block;margin-top:8px;font-size:.95rem;line-height:1.25}
+.alb small{display:block}
+.cv{position:relative;aspect-ratio:1;border-radius:20px;overflow:hidden;background:#1d1f26}
+.cv img,.ph{width:100%;height:100%;object-fit:cover;display:block}
+.px{position:absolute;right:8px;bottom:8px;background:rgba(13,14,18,.7);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-radius:99px;padding:2px 9px;font-size:.8rem;font-weight:600}
+.dot{position:absolute;left:9px;top:9px;width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
+.rar{display:inline-block;border-radius:99px;padding:2px 10px;font-size:.8rem;font-weight:600;color:var(--c);background:color-mix(in srgb,var(--c) 20%,transparent);border:1px solid color-mix(in srgb,var(--c) 55%,transparent)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.chip{border-radius:99px;padding:2px 10px;font-size:.85rem;background:var(--gl);border:1px solid var(--bd)}
+.seg{display:inline-flex;background:var(--gl);border:1px solid var(--bd);border-radius:99px;padding:4px;margin:6px 0 14px}
+.seg button{background:none;border:0;border-radius:99px;padding:8px 16px;color:var(--mu);font-weight:600;cursor:pointer}
+.seg button.on{background:var(--ac);color:#15161a}
+.tools{display:flex;gap:8px;margin-bottom:16px}
+input[type=text],select{background:var(--gl);border:1px solid var(--bd);border-radius:99px;padding:11px 16px;min-width:0}
+input[type=text]{flex:1}
+select option{color:#111}
+.dos{background:var(--gl);border:1px solid var(--bd);border-radius:22px;padding:10px;color:inherit;text-align:left;cursor:pointer}
+.dos .mos{display:grid;grid-template-columns:1fr 1fr;gap:4px;aspect-ratio:1;border-radius:14px;overflow:hidden;background:#1d1f26;margin-bottom:8px}
+.dos .mos img{width:100%;height:100%;object-fit:cover}
+.dos b{display:block}
+.res{display:flex;gap:12px;padding:10px;margin-bottom:10px;align-items:center}
+.res .cv{width:76px;flex:none;border-radius:14px}
+.res .in{flex:1;min-width:0}.res .in b{display:block;overflow-wrap:anywhere}
+.res .row{margin-top:8px}.res .btn{padding:7px 13px;font-size:.9rem}
+.msg{min-height:1.4em;color:var(--mu)}.msg.err{color:#ff8d7a}
+.card{padding:20px;margin-bottom:14px}.card p{margin:0 0 14px}
+.land{text-align:center;padding:48px 12px}.land h1{font:800 3.4rem/1 var(--d);margin:0 0 10px}
+.vide{border:1.5px dashed var(--bd);border-radius:22px;padding:26px;text-align:center;color:var(--mu)}
+.vide p{margin:0 0 14px}
+nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0));width:min(92vw,420px);display:flex;gap:2px;padding:6px;z-index:5;background:rgba(22,23,29,.72);border:1px solid var(--bd);border-radius:99px;-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+body.off nav{display:none}
+nav button{flex:1;background:none;border:0;border-radius:99px;padding:8px 2px;color:var(--mu);font-size:.72rem;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
+nav button.on{background:var(--ac);color:#15161a}
+nav svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+dialog{background:#17181d;color:var(--tx);border:1px solid var(--bd);border-radius:28px;width:min(94vw,440px);max-height:88vh;padding:20px}
+dialog::backdrop{background:rgba(5,6,8,.65);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+dialog h2{margin:12px 0 4px;font-size:1.4rem}
+dialog .big{border-radius:20px;overflow:hidden;aspect-ratio:1;background:#1d1f26}
+dialog img{width:100%;height:100%;object-fit:cover}
+.ck{display:flex;gap:10px;align-items:center;padding:6px 0}
+dialog form{margin:0}
 </style>
 </head>
 <body>
-
-<header>
-  <div class="record" aria-hidden="true"></div>
-  <div>
-    <h1>Unlisted</h1>
-    <p id="compteur"></p>
-  </div>
-</header>
-
-<nav role="tablist" aria-label="Sections">
-  <button role="tab" id="tab-chercher" aria-selected="true" aria-controls="vue-chercher">Chercher</button>
-  <button role="tab" id="tab-collection" aria-selected="false" aria-controls="vue-collection">Ma collection</button>
-  <button role="tab" id="tab-compte" aria-selected="false" aria-controls="vue-compte">Compte</button>
+<header class="top"><span class="logo">Unlisted</span><button class="pill" id="btn-installer" hidden>Installer l’app</button></header>
+<main id="vue"></main>
+<nav id="nav" aria-label="Navigation">
+<button data-v="accueil"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z"/></svg>Accueil</button>
+<button data-v="collection"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>Collection</button>
+<button data-v="chercher"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>Chercher</button>
+<button data-v="compte"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Compte</button>
 </nav>
-
-<main>
-  <section id="vue-chercher" role="tabpanel" aria-labelledby="tab-chercher">
-    <h2>Ajouter un disque</h2>
-    <p class="aide">Tape le code-barres de la pochette ou le numéro de catalogue (sur la tranche ou le label), par exemple <strong>SRX 6244</strong>.</p>
-    <form id="form-recherche">
-      <input type="text" id="saisie" placeholder="Code-barres ou n° de catalogue" autocomplete="off" autocapitalize="characters" enterkeyhint="search" aria-label="Code-barres ou numéro de catalogue">
-      <button class="btn" type="submit" id="btn-chercher">Chercher</button>
-    </form>
-    <p id="statut" class="statut" role="status"></p>
-    <div id="resultats"></div>
-  </section>
-
-  <section id="vue-collection" role="tabpanel" aria-labelledby="tab-collection" hidden>
-    <h2>Ma collection</h2>
-    <div id="grille"></div>
-  </section>
-
-  <section id="vue-compte" role="tabpanel" aria-labelledby="tab-compte" hidden>
-    <h2>Compte Discogs</h2>
-    <p id="statut-compte" class="statut" role="status"></p>
-    <div id="zone-compte"></div>
-  </section>
-</main>
-
+<dialog id="fiche"></dialog>
+<dialog id="aide-install">
+<h2>Installer Unlisted</h2>
+<ol><li>Touche <strong>Partager</strong> (le carré avec une flèche) dans Safari.</li><li>Touche <strong>Sur l’écran d’accueil</strong>.</li><li>Touche <strong>Ajouter</strong>.</li></ol>
+<form method="dialog"><button class="btn">Compris</button></form>
+</dialog>
 <script>
-(function () {
-  "use strict";
+(()=>{"use strict";
+const $=s=>document.querySelector(s);
+const L=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch{return d}};
+const W=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}};
+const h=(t,p,...k)=>{const n=document.createElement(t);for(const a in p||{}){const v=p[a];if(v==null||v===false)continue;if(a==="class")n.className=v;else if(a.startsWith("on"))n.addEventListener(a.slice(2),v);else n.setAttribute(a,v===true?"":v)}n.append(...k.flat().filter(x=>x!=null&&x!==false));return n};
+const S={c:L("unlisted:collection",L("vinyles:collection",[])),w:L("unlisted:wishlist",[]),d:L("unlisted:dossiers",[]),info:L("unlisted:info",{}),user:null,down:false,vue:"accueil",sous:"tous",tri:"recent",q:"",dos:null,mode:"code",sq:"",res:[],msg:"",err:false,imp:""};
+const sv=()=>{W("unlisted:collection",S.c);W("unlisted:wishlist",S.w);W("unlisted:dossiers",S.d);W("unlisted:info",S.info)};
+const pause=ms=>new Promise(r=>setTimeout(r,ms));
+const eur=v=>v==null?"–":new Intl.NumberFormat("fr-FR",{style:"currency",currency:"EUR"}).format(v);
+const P=[["Commun","#8a90a0"],["Peu commun","#4fb286"],["Rare","#4c8df0"],["Épique","#a66be8"],["Légendaire","#f2b632"]];
+const inf=x=>S.info[x.id],pr=x=>{const i=inf(x);return i&&i.lowest!=null?i.lowest:null};
+const pal=i=>{if(!i||(!i.have&&!i.want))return null;let t=i.have>=3000?0:i.have>=1000?1:i.have>=300?2:i.have>=100?3:4;if(i.have<3000&&i.want>=i.have*1.5)t=Math.min(4,t+1);return t};
+const pl=x=>pal(inf(x));
+const badge=t=>t==null?null:h("span",{class:"rar",style:"--c:"+P[t][1]},P[t][0]);
+const img=x=>x.thumb?h("img",{src:x.thumb,alt:"",loading:"lazy"}):h("div",{class:"ph"});
+const cp=x=>({id:x.id,title:x.title,year:x.year||"",country:x.country||"",label:x.label||"",catno:x.catno||"",thumb:x.thumb||"",ajouteLe:Date.now()});
+const meta=x=>[x.year,x.country,x.label,x.catno].filter(Boolean).join(" · ");
 
-  var CLE_COLLECTION = "unlisted:collection";
-  var ANCIENNE_CLE = "vinyles:collection"; // première version de l’app
+/* ---- Valeurs et raretés : une requête par disque, en arrière-plan ---- */
+const Q=[];let run=false,fait=0,tot=0;
+function enrich(){const vus=new Set(Q);[...S.c,...S.w].forEach(x=>{const i=S.info[x.id];if(!vus.has(x.id)&&(!i||Date.now()-i.at>12096e5)){Q.push(x.id);vus.add(x.id)}});if(!run&&Q.length&&S.user)boucle()}
+async function boucle(){run=true;fait=0;tot=Q.length;
+while(Q.length){const id=Q[0];
+try{const r=await fetch("/api/info?id="+id,{method:"POST"});
+if(r.status===429){await pause(30000);continue}
+if(r.status===401){S.user=null;Q.length=0;break}
+Q.shift();if(r.ok)S.info[id]={...await r.json(),at:Date.now()}}catch{Q.shift()}
+fait++;if(fait%6===0){sv();maj()}await pause(1100)}
+run=false;sv();maj()}
+const maj=()=>{if(S.vue==="accueil"||S.vue==="collection")rendre()};
 
-  // Le stockage peut être indisponible (navigation privée) : chaque accès est protégé.
-  function lire(cle, defaut) {
-    try {
-      var v = localStorage.getItem(cle);
-      return v === null ? defaut : JSON.parse(v);
-    } catch (e) { return defaut; }
-  }
-  function ecrire(cle, valeur) {
-    try { localStorage.setItem(cle, JSON.stringify(valeur)); } catch (e) {}
-  }
+/* ---- Actions ---- */
+const ajoutC=x=>{if(!S.c.some(y=>y.id===x.id))S.c.unshift(cp(x));S.w=S.w.filter(y=>y.id!==x.id);sv();enrich()};
+const retC=id=>{S.c=S.c.filter(x=>x.id!==id);S.d.forEach(f=>f.items=f.items.filter(n=>n!==id));sv()};
+const togW=x=>{S.w=S.w.some(y=>y.id===x.id)?S.w.filter(y=>y.id!==x.id):[cp(x),...S.w];sv();enrich()};
 
-  var collection = lire(CLE_COLLECTION, null);
-  if (collection === null) collection = lire(ANCIENNE_CLE, []);
-  if (!Array.isArray(collection)) collection = [];
+function fiche(x){const d=$("#fiche"),i=inf(x),poss=S.c.some(y=>y.id===x.id),veut=S.w.some(y=>y.id===x.id);
+const fin=()=>{d.close();rendre()};
+d.replaceChildren(
+h("div",{class:"big"},img(x)),h("h2",{},x.title),h("small",{},meta(x)),
+h("div",{class:"chips"},badge(pl(x)),pr(x)!=null&&h("span",{class:"chip"},"À partir de "+eur(pr(x))),i&&(i.have||i.want)?h("span",{class:"chip"},i.have+" l’ont · "+i.want+" le cherchent"):null,i&&i.forSale?h("span",{class:"chip"},i.forSale+" en vente"):null),
+poss&&S.d.length?h("div",{},h("small",{},"Dossiers"),S.d.map(f=>h("label",{class:"ck"},h("input",{type:"checkbox",checked:f.items.includes(x.id),onchange:e=>{f.items=e.target.checked?[...f.items,x.id]:f.items.filter(n=>n!==x.id);sv()}}),f.name))):null,
+h("div",{class:"row",style:"margin-top:14px"},
+poss?h("button",{class:"btn danger",onclick:()=>{if(confirm("Retirer ce disque de ta collection ?")){retC(x.id);fin()}}},"Retirer"):h("button",{class:"btn",onclick:()=>{ajoutC(x);fin()}},"Ajouter à ma collection"),
+!poss&&h("button",{class:"btn sobre",onclick:()=>{togW(x);fin()}},veut?"Retirer des souhaits":"Liste de souhaits"),
+h("a",{class:"btn sobre",href:"https://www.discogs.com/release/"+x.id,target:"_blank",rel:"noopener"},"Discogs"),
+h("button",{class:"btn sobre",onclick:()=>d.close()},"Fermer")));d.showModal()}
 
-  var utilisateur = null;       // nom d’utilisateur Discogs, ou null
-  var serviceIndisponible = false;
-  var enImport = false;
-  var derniersResultats = [];
+/* ---- Vues ---- */
+const carte=x=>h("button",{class:"alb",onclick:()=>fiche(x)},h("div",{class:"cv"},img(x),pl(x)!=null&&h("i",{class:"dot",style:"--c:"+P[pl(x)][1]}),pr(x)!=null&&h("span",{class:"px"},eur(pr(x)))),h("b",{},x.title),h("small",{},[x.year,x.label].filter(Boolean).join(" · ")));
+const seg=(o,cur,fn)=>h("div",{class:"seg"},o.map(([k,l])=>h("button",{class:k===cur?"on":"",onclick:()=>fn(k)},l)));
+const go=v=>{S.vue=v;rendre();scrollTo(0,0)};
+const stat=(t,v,s)=>h("div",{class:"glass stat"},h("small",{},t),h("b",{},v),h("small",{},s));
+const mise=(t,x,d)=>h("button",{class:"glass mise",onclick:()=>fiche(x)},h("div",{class:"cv"},img(x)),h("div",{},h("small",{},t),h("b",{},x.title),d));
 
-  var $ = function (s) { return document.querySelector(s); };
+function vAccueil(){const n=S.c.length,nv=S.c.filter(x=>pr(x)!=null),tot=nv.reduce((a,x)=>a+pr(x),0);
+const rare=S.c.filter(x=>pl(x)!=null).sort((a,b)=>pl(b)-pl(a)||inf(a).have-inf(b).have)[0];
+const cher=[...nv].sort((a,b)=>pr(b)-pr(a))[0];
+return h("div",{},
+h("section",{class:"glass hero"},h("div",{class:"rec"}),h("small",{},"Salut "+S.user),h("div",{class:"num"},n),h("p",{},n>1?"disques dans ta collection":"disque dans ta collection"),h("small",{},S.w.length+" dans ta liste de souhaits")),
+run?h("div",{class:"glass prog"},h("small",{},"Calcul des valeurs et raretés : "+fait+" sur "+tot),h("progress",{max:tot,value:fait})):null,
+n?h("div",{},
+h("div",{class:"duo"},stat("Valeur estimée",nv.length?eur(tot):"–",nv.length?"prix les plus bas, "+nv.length+" disque"+(nv.length>1?"s":"")+" sur "+n:"en cours de calcul"),stat("Dossiers",S.d.length,S.d.length?"pour ranger ta collection":"à créer dans Collection")),
+rare?mise("Le plus rare",rare,h("span",{},badge(pl(rare)))):null,
+cher?mise("Le plus cher",cher,h("small",{},"À partir de "+eur(pr(cher)))):null,
+h("h3",{},"Ajoutés récemment"),h("div",{class:"rail"},[...S.c].sort((a,b)=>b.ajouteLe-a.ajouteLe).slice(0,10).map(carte)))
+:h("div",{class:"vide"},h("p",{},"Ta collection est vide. Importe ta bibliothèque Discogs ou cherche un premier disque."),h("div",{class:"row",style:"justify-content:center"},h("button",{class:"btn",onclick:()=>go("compte")},"Importer"),h("button",{class:"btn sobre",onclick:()=>go("chercher")},"Chercher"))))}
 
-  function el(tag, props, enfants) {
-    var n = document.createElement(tag);
-    if (props) Object.keys(props).forEach(function (k) {
-      if (k === "class") n.className = props[k];
-      else if (k === "text") n.textContent = props[k];
-      else n.setAttribute(k, props[k]);
-    });
-    (enfants || []).forEach(function (c) { n.appendChild(c); });
-    return n;
-  }
+const TRI={recent:["Récents",(a,b)=>b.ajouteLe-a.ajouteLe],ancien:["Anciens",(a,b)=>a.ajouteLe-b.ajouteLe],az:["Titre A–Z",(a,b)=>a.title.localeCompare(b.title,"fr",{sensitivity:"base"})],valeur:["Valeur",(a,b)=>(pr(b)??-1)-(pr(a)??-1)],rarete:["Rareté",(a,b)=>(pl(b)??-1)-(pl(a)??-1)]};
+const liste=src=>src.filter(x=>x.title.toLowerCase().includes(S.q.toLowerCase())).sort(TRI[S.tri][1]);
+const outils=src=>h("div",{},h("div",{class:"tools"},h("input",{type:"text",placeholder:"Filtrer par titre",value:S.q,"aria-label":"Filtrer",oninput:e=>{S.q=e.target.value;$("#g").replaceChildren(...liste(src).map(carte))}}),h("select",{"aria-label":"Trier",onchange:e=>{S.tri=e.target.value;$("#g").replaceChildren(...liste(src).map(carte))}},Object.entries(TRI).map(([k,v])=>h("option",{value:k,selected:k===S.tri},v[0])))),h("div",{class:"grid",id:"g"},liste(src).map(carte)));
 
-  function pochette(url, alt) {
-    if (!url) return el("div", { "class": "pochette-vide", "aria-hidden": "true" });
-    return el("img", { src: url, alt: alt || "", loading: "lazy" });
-  }
+function vColl(){
+const bar=seg([["tous","Tous"],["dossiers","Dossiers"],["souhaits","Souhaits"]],S.sous,k=>{S.sous=k;S.dos=null;S.q="";rendre()});
+let corps;
+if(S.sous==="tous")corps=S.c.length?outils(S.c):h("div",{class:"vide"},"Aucun disque pour l’instant.");
+else if(S.sous==="souhaits")corps=S.w.length?h("div",{},S.w.map(x=>h("div",{class:"glass res"},h("div",{class:"cv"},img(x)),h("div",{class:"in"},h("b",{},x.title),h("small",{},meta(x)),h("div",{class:"chips"},badge(pl(x)),pr(x)!=null&&h("span",{class:"chip"},"À partir de "+eur(pr(x)))),h("div",{class:"row"},h("button",{class:"btn",onclick:()=>{ajoutC(x);rendre()}},"Je l’ai"),h("button",{class:"btn sobre",onclick:()=>{togW(x);rendre()}},"Retirer")))))):h("div",{class:"vide"},h("p",{},"Ta liste de souhaits est vide. Ajoute des disques depuis l’onglet Chercher, par code ou par titre."),h("button",{class:"btn",onclick:()=>go("chercher")},"Chercher"));
+else{const f=S.d.find(z=>z.id===S.dos);
+if(f){const src=S.c.filter(x=>f.items.includes(x.id));
+corps=h("div",{},h("div",{class:"row",style:"margin-bottom:10px"},h("button",{class:"btn sobre",onclick:()=>{S.dos=null;rendre()}},"Retour"),h("button",{class:"btn sobre",onclick:()=>{const n=prompt("Nouveau nom du dossier",f.name);if(n&&n.trim()){f.name=n.trim().slice(0,60);sv();rendre()}}},"Renommer"),h("button",{class:"btn danger",onclick:()=>{if(confirm("Supprimer ce dossier ? Les disques restent dans ta collection.")){S.d=S.d.filter(z=>z!==f);S.dos=null;sv();rendre()}}},"Supprimer")),h("h2",{},f.name),src.length?outils(src):h("div",{class:"vide"},"Ce dossier est vide. Ouvre un disque de ta collection pour le ranger ici."))}
+else corps=h("div",{class:"grid"},S.d.map(f=>{const th=S.c.filter(x=>f.items.includes(x.id)&&x.thumb).slice(0,4);return h("button",{class:"dos",onclick:()=>{S.dos=f.id;S.q="";rendre()}},h("div",{class:"mos"},th.map(x=>h("img",{src:x.thumb,alt:""}))),h("b",{},f.name),h("small",{},f.items.length+" disque"+(f.items.length>1?"s":"")))}),h("button",{class:"dos",onclick:()=>{const n=prompt("Nom du dossier ?");if(n&&n.trim()){S.d.push({id:"f"+Date.now().toString(36),name:n.trim().slice(0,60),items:[]});sv();rendre()}}},h("div",{class:"mos",style:"place-items:center;font-size:2.6rem;display:grid"},"+"),h("b",{},"Nouveau dossier"),h("small",{},"Range ta collection")))}
+return h("div",{},h("h2",{},"Collection"),bar,corps)}
 
-  function sauver() { ecrire(CLE_COLLECTION, collection); majCompteur(); }
+async function chercher(e){e.preventDefault();const q=$("#q").value.trim();S.sq=q;if(!q)return;S.msg="Recherche en cours…";S.err=false;S.res=[];rendre();
+try{const r=await fetch("/api/search?mode="+(S.mode==="titre"?"titre":"code")+"&q="+encodeURIComponent(q));
+if(r.status===401){S.user=null;return rendre()}
+if(r.status===429)throw"Trop de recherches d’un coup. Attends une minute.";
+if(!r.ok)throw"Discogs ne répond pas. Réessaie dans un instant.";
+S.res=(await r.json()).results||[];S.msg=S.res.length?S.res.length+" pressage"+(S.res.length>1?"s":"")+" trouvé"+(S.res.length>1?"s":"")+". Choisis le bon.":"Aucun vinyle trouvé. Vérifie le numéro ou essaie l’autre mode.";S.err=!S.res.length}
+catch(x){S.msg=typeof x==="string"?x:"Connexion impossible.";S.err=true}rendre()}
+function vCherche(){return h("div",{},h("h2",{},"Chercher"),seg([["code","Par code"],["titre","Par titre"]],S.mode,k=>{S.mode=k;S.res=[];S.msg="";rendre()}),
+h("p",{class:"mu"},S.mode==="code"?"Code-barres de la pochette ou numéro de catalogue (tranche ou label), par exemple SRX 6244.":"Titre de l’album, avec ou sans l’artiste."),
+h("form",{class:"tools",onsubmit:chercher},h("input",{type:"text",id:"q",value:S.sq,placeholder:S.mode==="code"?"Code ou n° de catalogue":"Titre de l’album",autocomplete:"off","aria-label":"Recherche"}),h("button",{class:"btn",type:"submit"},"Chercher")),
+h("p",{class:"msg"+(S.err?" err":""),role:"status"},S.msg),
+S.res.map(x=>{const a=S.c.some(y=>y.id===x.id),w=S.w.some(y=>y.id===x.id);return h("div",{class:"glass res"},h("div",{class:"cv"},img(x)),h("div",{class:"in"},h("b",{},x.title),h("small",{},meta(x)),h("div",{class:"row"},a?h("small",{},"Dans ta collection"):h("button",{class:"btn",onclick:()=>{ajoutC(x);rendre()}},"Collection"),!a&&h("button",{class:"btn sobre",onclick:()=>{togW(x);rendre()}},w?"Dans les souhaits":"Souhaits"))))}))}
 
-  // --- Onglets ---
-  var onglets = ["chercher", "collection", "compte"];
-  function afficher(nom) {
-    onglets.forEach(function (o) {
-      var actif = o === nom;
-      $("#tab-" + o).setAttribute("aria-selected", String(actif));
-      $("#vue-" + o).hidden = !actif;
-    });
-    if (nom === "collection") dessinerCollection();
-  }
-  onglets.forEach(function (o) {
-    $("#tab-" + o).addEventListener("click", function () { afficher(o); });
-  });
+async function importer(){const b=$("#imp");b.disabled=true;let p=1,pages=1,add=0;const ids=new Set(S.c.map(x=>x.id));
+try{while(p<=pages){$("#cm").textContent="Import en cours… page "+p+" sur "+pages;
+const r=await fetch("/api/collection?page="+p);
+if(r.status===429)throw"Discogs demande une pause : relance l’import dans une minute.";
+if(!r.ok)throw"Import impossible pour le moment.";
+const d=await r.json();pages=d.pages||1;
+for(const x of d.releases||[]){if(!x.vinyl||ids.has(x.id))continue;ids.add(x.id);S.c.push(cp(x));add++}
+sv();p++;await pause(1100)}
+S.imp=add+(add>1?" vinyles importés.":" vinyle importé.");S.err=false}
+catch(e){S.imp=typeof e==="string"?e:"Connexion impossible.";S.err=true}
+sv();enrich();rendre()}
 
-  function majCompteur() {
-    var n = collection.length;
-    $("#compteur").textContent = n === 0 ? "Aucun disque pour l’instant"
-      : n + (n > 1 ? " disques" : " disque") + " dans la collection";
-  }
+function vCompte(){return h("div",{},h("h2",{},"Compte"),h("div",{class:"glass card"},h("p",{},"Connecté en tant que "+S.user+"."),h("p",{class:"mu"},"L’import ajoute les vinyles de ta collection Discogs. Les disques déjà présents ne sont pas dupliqués. Les valeurs et raretés se calculent ensuite en arrière-plan."),h("p",{class:"msg"+(S.err?" err":""),id:"cm"},S.imp),h("div",{class:"row"},h("button",{class:"btn",id:"imp",onclick:importer},"Importer ma collection Discogs"),h("button",{class:"btn sobre",onclick:async()=>{await fetch("/api/logout",{method:"POST"});S.user=null;rendre()}},"Se déconnecter"))))}
 
-  function statut(id, message, erreur) {
-    var s = $(id);
-    s.textContent = message || "";
-    s.className = "statut" + (erreur ? " erreur" : "");
-  }
+function vLanding(){return h("div",{class:"land"},h("h1",{},"Unlisted"),h("p",{class:"mu"},S.down?"La connexion à Discogs n’est pas disponible pour le moment.":"Ton catalogue de vinyles, relié à Discogs."),!S.down&&h("a",{class:"btn",href:"/api/auth-start"},"Se connecter avec Discogs"),S.imp&&h("p",{class:"msg err"},S.imp))}
 
-  // --- Session Discogs ---
-  function chargerSession() {
-    return fetch("/api/me", { credentials: "same-origin" }).then(function (res) {
-      if (res.ok) return res.json().then(function (d) { utilisateur = d.username; });
-      utilisateur = null;
-      if (res.status === 500 || res.status === 404) serviceIndisponible = true;
-    }).catch(function () {
-      utilisateur = null;
-      serviceIndisponible = true;
-    });
-  }
+function rendre(){document.body.classList.toggle("off",!S.user);
+const v=!S.user?vLanding():{accueil:vAccueil,collection:vColl,chercher:vCherche,compte:vCompte}[S.vue]();
+$("#vue").replaceChildren(v);
+document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===S.vue))}
+document.querySelectorAll("#nav button").forEach(b=>b.addEventListener("click",()=>{S.dos=null;go(b.dataset.v)}));
 
-  function dessinerCompte() {
-    var zone = $("#zone-compte");
-    zone.textContent = "";
+/* ---- Installation de l’app ---- */
+let inv=null;const bi=$("#btn-installer");
+const deja=()=>(matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+const ios=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const majI=()=>{bi.hidden=deja()||!(inv||ios())};
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();inv=e;majI()});
+addEventListener("appinstalled",()=>{inv=null;majI()});
+bi.addEventListener("click",()=>{if(inv){const d=inv;inv=null;bi.hidden=true;d.prompt()}else $("#aide-install").showModal()});
+majI();
+if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));
 
-    if (serviceIndisponible) {
-      statut("#statut-compte", "La connexion à Discogs n’est pas disponible pour le moment. Vérifie que le site est bien publié avec ses fonctions et ses variables d’environnement.", true);
-      return;
-    }
-
-    if (!utilisateur) {
-      var carte = el("div", { "class": "compte-carte" }, [
-        el("p", { text: "Connecte ton compte Discogs pour chercher des disques et importer ta bibliothèque en une fois. Unlisted ne voit jamais ton mot de passe : tu t’identifies directement sur Discogs." }),
-        el("a", { "class": "btn label", href: "/api/auth-start", text: "Se connecter avec Discogs" })
-      ]);
-      zone.appendChild(carte);
-      return;
-    }
-
-    var progression = el("progress", { id: "progression", max: "100", value: "0", hidden: "" });
-    var importer = el("button", { "class": "btn label", type: "button", id: "btn-import", text: "Importer ma collection Discogs" });
-    importer.addEventListener("click", importerCollection);
-    var quitter = el("button", { "class": "btn sobre", type: "button", text: "Se déconnecter" });
-    quitter.addEventListener("click", deconnecter);
-
-    zone.appendChild(el("div", { "class": "compte-carte" }, [
-      el("p", { text: "Connecté en tant que " + utilisateur + "." }),
-      el("p", { "class": "aide", text: "L’import ajoute les vinyles de ta collection Discogs à Unlisted. Les disques déjà présents ne sont pas dupliqués." }),
-      progression,
-      el("div", { "class": "actions" }, [importer, quitter])
-    ]));
-  }
-
-  function deconnecter() {
-    fetch("/api/logout", { method: "POST", credentials: "same-origin" }).then(function () {
-      utilisateur = null;
-      statut("#statut-compte", "Tu es déconnecté.");
-      dessinerCompte();
-    });
-  }
-
-  // --- Import de la collection ---
-  function pause(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
-
-  function importerCollection() {
-    if (enImport) return;
-    enImport = true;
-    var bouton = $("#btn-import");
-    var barre = $("#progression");
-    bouton.disabled = true;
-    barre.hidden = false;
-    barre.value = 0;
-
-    var page = 1, pages = 1, ajoutes = 0, autresFormats = 0, dejaLa = 0;
-    var ids = {};
-    collection.forEach(function (d) { ids[d.id] = true; });
-
-    function etape() {
-      statut("#statut-compte", "Import en cours… page " + page + " sur " + pages);
-      return fetch("/api/collection?page=" + page, { credentials: "same-origin" }).then(function (res) {
-        if (res.status === 401) throw new Error("session");
-        if (res.status === 429) throw new Error("limite");
-        if (!res.ok) throw new Error("discogs");
-        return res.json();
-      }).then(function (d) {
-        pages = d.pages || 1;
-        (d.releases || []).forEach(function (r) {
-          if (!r.vinyl) { autresFormats++; return; }
-          if (ids[r.id]) { dejaLa++; return; }
-          ids[r.id] = true;
-          collection.push({
-            id: r.id, title: r.title, year: r.year, country: "",
-            label: r.label, catno: r.catno, thumb: r.thumb, ajouteLe: Date.now()
-          });
-          ajoutes++;
-        });
-        sauver();
-        barre.value = Math.round((page / pages) * 100);
-        if (page < pages) {
-          page++;
-          return pause(1100).then(etape); // reste sous la limite de requêtes de Discogs
-        }
-      });
-    }
-
-    etape().then(function () {
-      var msg = ajoutes + (ajoutes > 1 ? " vinyles importés." : " vinyle importé.");
-      if (dejaLa) msg += " " + dejaLa + " déjà présent" + (dejaLa > 1 ? "s" : "") + ".";
-      if (autresFormats) msg += " " + autresFormats + " autre" + (autresFormats > 1 ? "s" : "") + " format" + (autresFormats > 1 ? "s" : "") + " ignoré" + (autresFormats > 1 ? "s" : "") + " (CD, cassettes…).";
-      statut("#statut-compte", msg);
-    }).catch(function (err) {
-      var messages = {
-        session: "Ta session Discogs a expiré. Reconnecte-toi pour continuer.",
-        limite: "Discogs demande une pause. Les disques déjà importés sont gardés : relance l’import dans une minute.",
-        discogs: "Discogs ne répond pas correctement. Relance l’import dans un instant."
-      };
-      if (err.message === "session") { utilisateur = null; dessinerCompte(); }
-      statut("#statut-compte", messages[err.message] || "Connexion impossible. Vérifie ta connexion internet.", true);
-    }).then(function () {
-      enImport = false;
-      var b = $("#btn-import"); if (b) b.disabled = false;
-      majCompteur();
-    });
-  }
-
-  // --- Recherche ---
-  function dejaPossede(id) {
-    return collection.some(function (d) { return d.id === id; });
-  }
-
-  function dessinerResultats() {
-    var zone = $("#resultats");
-    zone.textContent = "";
-    derniersResultats.forEach(function (r) {
-      var infos = el("div", { "class": "infos" }, [
-        el("div", { "class": "titre", text: r.title }),
-        el("div", { "class": "detail", text: [r.year, r.country].filter(Boolean).join(" · ") }),
-        el("div", { "class": "detail", text: [r.label, r.catno].filter(Boolean).join(" · ") })
-      ]);
-      if (dejaPossede(r.id)) {
-        infos.appendChild(el("div", { "class": "deja", text: "Dans ta collection" }));
-      } else {
-        var bouton = el("button", { "class": "btn small", type: "button", text: "Ajouter à ma collection" });
-        bouton.addEventListener("click", function () { ajouter(r); });
-        infos.appendChild(bouton);
-      }
-      zone.appendChild(el("div", { "class": "resultat" }, [pochette(r.thumb, ""), infos]));
-    });
-  }
-
-  function ajouter(r) {
-    if (dejaPossede(r.id)) return;
-    collection.unshift({
-      id: r.id, title: r.title, year: r.year || "", country: r.country || "",
-      label: r.label || "", catno: r.catno || "", thumb: r.thumb || "", ajouteLe: Date.now()
-    });
-    sauver();
-    dessinerResultats();
-    statut("#statut", "Ajouté : " + r.title);
-  }
-
-  $("#form-recherche").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var saisie = $("#saisie").value.trim();
-    if (!saisie) { statut("#statut", "Saisis un code-barres ou un numéro de catalogue.", true); return; }
-    if (!utilisateur) {
-      statut("#statut", "Connecte-toi avec Discogs dans l’onglet Compte pour lancer une recherche.", true);
-      return;
-    }
-    var bouton = $("#btn-chercher");
-    bouton.disabled = true;
-    statut("#statut", "Recherche en cours…");
-    $("#resultats").textContent = "";
-
-    fetch("/api/search?q=" + encodeURIComponent(saisie), { credentials: "same-origin" }).then(function (res) {
-      if (res.status === 401) throw new Error("session");
-      if (res.status === 429) throw new Error("limite");
-      if (!res.ok) throw new Error("discogs");
-      return res.json();
-    }).then(function (d) {
-      derniersResultats = d.results || [];
-      if (derniersResultats.length === 0) {
-        statut("#statut", "Aucun vinyle trouvé pour ce numéro. Vérifie les chiffres ou essaie l’autre identifiant (code-barres ou numéro de catalogue).", true);
-      } else {
-        statut("#statut", derniersResultats.length + (derniersResultats.length > 1 ? " pressages trouvés. Choisis le bon." : " pressage trouvé."));
-      }
-      dessinerResultats();
-    }).catch(function (err) {
-      var messages = {
-        session: "Ta session Discogs a expiré. Reconnecte-toi dans l’onglet Compte.",
-        limite: "Trop de recherches d’un coup. Attends une minute puis réessaie.",
-        discogs: "Discogs ne répond pas correctement. Réessaie dans un instant."
-      };
-      if (err.message === "session") { utilisateur = null; dessinerCompte(); }
-      statut("#statut", messages[err.message] || "Connexion impossible. Vérifie ta connexion internet.", true);
-    }).then(function () { bouton.disabled = false; });
-  });
-
-  // --- Collection ---
-  function dessinerCollection() {
-    var grille = $("#grille");
-    grille.textContent = "";
-    if (collection.length === 0) {
-      grille.style.display = "block";
-      var vide = el("div", { "class": "vide" }, [
-        el("p", { text: "Ta collection est vide. Importe ta bibliothèque Discogs ou cherche un disque pour ajouter le premier." })
-      ]);
-      var aller = el("button", { "class": "btn", type: "button", text: utilisateur ? "Chercher un disque" : "Se connecter" });
-      aller.addEventListener("click", function () {
-        if (utilisateur) { afficher("chercher"); $("#saisie").focus(); } else { afficher("compte"); }
-      });
-      vide.appendChild(aller);
-      grille.appendChild(vide);
-      return;
-    }
-    grille.style.display = "";
-    collection.forEach(function (d) {
-      var retirer = el("button", { "class": "btn ghost", type: "button", text: "Retirer" });
-      retirer.addEventListener("click", function () {
-        if (confirm("Retirer « " + d.title + " » de la collection ?")) {
-          collection = collection.filter(function (x) { return x.id !== d.id; });
-          sauver();
-          dessinerCollection();
-        }
-      });
-      grille.appendChild(el("div", { "class": "disque" }, [
-        pochette(d.thumb, d.title),
-        el("div", { "class": "titre", text: d.title }),
-        el("div", { "class": "detail", text: [d.year, d.country].filter(Boolean).join(" · ") }),
-        retirer
-      ]));
-    });
-  }
-
-  // --- Démarrage ---
-  majCompteur();
-  var params = new URLSearchParams(location.search);
-  var retourConnexion = params.get("connecte") === "1";
-  var erreurConnexion = params.get("erreur") === "connexion";
-  if (retourConnexion || erreurConnexion) history.replaceState(null, "", location.pathname);
-
-  chargerSession().then(function () {
-    dessinerCompte();
-    if (erreurConnexion) {
-      afficher("compte");
-      statut("#statut-compte", "La connexion avec Discogs a échoué. Réessaie.", true);
-    } else if (retourConnexion && utilisateur) {
-      afficher("compte");
-      statut("#statut-compte", "Connexion réussie. Tu peux importer ta collection.");
-    } else if (!utilisateur) {
-      afficher(collection.length ? "collection" : "compte");
-    }
-  });
+/* ---- Démarrage ---- */
+const prm=new URLSearchParams(location.search);
+if(prm.get("erreur")==="connexion")S.imp="La connexion avec Discogs a échoué. Réessaie.";
+if(prm.has("erreur")||prm.has("connecte"))history.replaceState(null,"",location.pathname);
+fetch("/api/me").then(async r=>{if(r.ok)S.user=(await r.json()).username;else if(r.status>=500||r.status===404)S.down=true}).catch(()=>{S.down=true}).then(()=>{rendre();enrich()});
 })();
 </script>
 </body>
